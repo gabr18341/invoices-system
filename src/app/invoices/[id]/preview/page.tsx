@@ -27,14 +27,27 @@ export default function InvoicePreviewPage() {
     }
   }, [params.id, invoices, router]);
 
+  const client = invoice ? clients.find(c => c.id === invoice.clientId) : undefined;
+  const printableClientName = (client?.name || "عميل")
+    .trim()
+    .replace(/[\\/:*?"<>|]/g, "-");
+  const documentFileName = `فاتورة_${printableClientName}_${invoice?.invoiceNumber || "بدون-رقم"}`;
+
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: `Invoice_${invoice?.invoiceNumber}`,
+    documentTitle: documentFileName,
   });
 
-  if (!invoice) return <div className="p-8 text-center">جاري التحميل...</div>;
+  const handleSavePdf = () => {
+    const previousTitle = document.title;
+    document.title = documentFileName;
+    window.print();
+    window.setTimeout(() => {
+      document.title = previousTitle;
+    }, 1000);
+  };
 
-  const client = clients.find(c => c.id === invoice.clientId);
+  if (!invoice) return <div className="p-8 text-center">جاري التحميل...</div>;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-16 sm:pb-20 print:max-w-none print:m-0 print:p-0 print:space-y-0">
@@ -53,7 +66,7 @@ export default function InvoicePreviewPage() {
             طباعة
           </button>
           <button 
-            onClick={() => window.print()}
+            onClick={handleSavePdf}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm"
           >
             <Download className="w-4 h-4" />
@@ -63,15 +76,15 @@ export default function InvoicePreviewPage() {
       </div>
 
       {/* Printable Invoice Container */}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden print:shadow-none print:rounded-none">
+      <div className="invoice-print-frame bg-white rounded-xl shadow-md overflow-hidden print:shadow-none print:rounded-none">
         <div 
           ref={printRef} 
-          className="p-5 sm:p-8 md:p-12 print:p-0 bg-white min-h-[1056px] print:min-h-0 text-gray-900 mx-auto print:max-w-full"
+          className="invoice-print-root p-5 sm:p-8 md:p-12 print:p-0 bg-white min-h-[1056px] print:min-h-0 text-gray-900 mx-auto print:max-w-full"
           style={{ maxWidth: '800px' }}
         >
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 border-b-2 border-gray-200 pb-6 sm:pb-8 mb-6 sm:mb-8">
-            <div className="space-y-2 max-w-full sm:max-w-xs">
+          <div className="invoice-print-header flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 border-b-2 border-gray-200 pb-6 sm:pb-8 mb-6 sm:mb-8">
+            <div className="invoice-print-company space-y-2 max-w-full sm:max-w-xs">
               {settings.logo ? (
                 <img src={settings.logo} alt={settings.name} className="max-h-20 object-contain mb-4" />
               ) : (
@@ -81,7 +94,7 @@ export default function InvoicePreviewPage() {
               <p className="text-gray-600 text-sm" >{settings.phone}</p>
               <p className="text-gray-600 text-sm">{settings.email}</p>
             </div>
-            <div className="text-left sm:self-start">
+            <div className="invoice-print-meta text-left sm:self-start">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-200 uppercase tracking-widest mb-3 sm:mb-4">INVOICE</h2>
               <div className="space-y-1">
                 <div className="flex justify-end gap-4 text-sm">
@@ -101,9 +114,9 @@ export default function InvoicePreviewPage() {
           </div>
 
           {/* Client Info */}
-          <div className="mb-8 sm:mb-10">
+          <div className="invoice-print-client-section mb-8 sm:mb-10">
             <h3 className="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-3">فاتورة إلى:</h3>
-            <div className="bg-gray-50 rounded-lg p-4 w-full sm:inline-block sm:min-w-[300px]">
+            <div className="invoice-print-client-card bg-gray-50 rounded-lg p-4 w-full sm:inline-block sm:min-w-[300px]">
               <h4 className="text-xl font-bold text-gray-900 mb-1">{client?.name}</h4>
               <p className="text-gray-600 text-sm">{client?.address}</p>
               <p className="text-gray-600 text-sm mt-2" >{client?.phone}</p>
@@ -112,9 +125,9 @@ export default function InvoicePreviewPage() {
           </div>
 
           {/* Items Table */}
-          <div className="mb-8">
-            <div className="overflow-x-auto -mx-5 sm:mx-0">
-              <table className="w-full min-w-[680px] sm:min-w-0 text-right border-collapse">
+          <div className="invoice-print-table-section mb-8">
+            <div className="invoice-print-table-wrap overflow-x-auto -mx-5 sm:mx-0">
+              <table className="invoice-print-table w-full min-w-[680px] sm:min-w-0 text-right border-collapse">
               <thead>
                 <tr className="border-b-2 border-gray-900 text-gray-900">
                   <th className="py-3 px-2 font-bold w-1/2">الخدمة / الوصف</th>
@@ -141,8 +154,8 @@ export default function InvoicePreviewPage() {
           </div>
 
           {/* Totals & Terms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div className="space-y-6">
+          <div className="invoice-print-summary grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div className="invoice-print-notes space-y-6">
               {invoice.paymentInfo && (
                 <div>
                   <h3 className="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">معلومات الدفع:</h3>
@@ -161,7 +174,7 @@ export default function InvoicePreviewPage() {
               )}
             </div>
             
-            <div className="bg-gray-50 rounded-xl p-6">
+            <div className="invoice-print-totals bg-gray-50 rounded-xl p-6">
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-gray-600">
                   <span>المجموع الفرعي:</span>
