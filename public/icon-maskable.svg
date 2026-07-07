@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A8A"/>
+      <stop offset="1" stop-color="#0B122A"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" rx="124" fill="url(#g)"/>
+  <g fill="#ffffff">
+    <path d="M150 162h212c18 0 34 15 34 34v130c0 18-16 34-34 34H150c-18 0-34-16-34-34V196c0-19 16-34 34-34Zm0 36c-1 0-2 1-2 2v122c0 1 1 2 2 2h212c1 0 2-1 2-2V200c0-1-1-2-2-2H150Z"/>
+    <path d="M171 250h118a11 11 0 0 1 0 22H171a11 11 0 0 1 0-22Z"/>
+    <path d="M171 216h170a11 11 0 0 1 0 22H171a11 11 0 0 1 0-22Z"/>
+    <path d="M171 284h78a11 11 0 0 1 0 22h-78a11 11 0 0 1 0-22Z"/>
+  </g>
+  <g font-family="Cairo, system-ui, -apple-system, Segoe UI, sans-serif" font-size="60" font-weight="900" fill="#ffffff">
+    <text x="256" y="395" text-anchor="middle">INV</text>
+  </g>
+</svg>
+

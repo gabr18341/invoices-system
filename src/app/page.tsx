@@ -4,6 +4,7 @@ import { useStore } from "@/store/useStore";
 import { FileText, Users, DollarSign, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import PwaClient from "@/components/PwaClient";
 
 export default function DashboardPage() {
   const { invoices, clients, settings } = useStore();
@@ -23,6 +24,8 @@ export default function DashboardPage() {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">لوحة التحكم</h1>
+
+      <PwaClient />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
