@@ -37,14 +37,14 @@ export default function InvoicePreviewPage() {
   const client = clients.find(c => c.id === invoice.clientId);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20 print:max-w-none print:m-0 print:p-0 print:space-y-0">
+    <div className="max-w-4xl mx-auto space-y-6 pb-16 sm:pb-20 print:max-w-none print:m-0 print:p-0 print:space-y-0">
       {/* Actions Toolbar - Hidden on Print */}
-      <div className="flex justify-between items-center print:hidden bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 print:hidden bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <Link href="/invoices" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
           <ArrowRight className="w-5 h-5" />
           العودة للفواتير
         </Link>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button 
             onClick={() => handlePrint()}
             className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg transition-colors shadow-sm"
@@ -66,23 +66,23 @@ export default function InvoicePreviewPage() {
       <div className="bg-white rounded-xl shadow-md overflow-hidden print:shadow-none print:rounded-none">
         <div 
           ref={printRef} 
-          className="p-12 print:p-0 bg-white min-h-[1056px] print:min-h-0 text-gray-900 mx-auto print:max-w-full"
+          className="p-5 sm:p-8 md:p-12 print:p-0 bg-white min-h-[1056px] print:min-h-0 text-gray-900 mx-auto print:max-w-full"
           style={{ maxWidth: '800px' }}
         >
           {/* Header */}
-          <div className="flex justify-between items-start border-b-2 border-gray-200 pb-8 mb-8">
-            <div className="space-y-2 max-w-xs">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 border-b-2 border-gray-200 pb-6 sm:pb-8 mb-6 sm:mb-8">
+            <div className="space-y-2 max-w-full sm:max-w-xs">
               {settings.logo ? (
                 <img src={settings.logo} alt={settings.name} className="max-h-20 object-contain mb-4" />
               ) : (
-                <h1 className="text-3xl font-bold text-blue-900 mb-4">{settings.name}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-4">{settings.name}</h1>
               )}
               <p className="text-gray-600 text-sm">{settings.address}</p>
               <p className="text-gray-600 text-sm" >{settings.phone}</p>
               <p className="text-gray-600 text-sm">{settings.email}</p>
             </div>
-            <div className="text-left">
-              <h2 className="text-4xl font-bold text-gray-200 uppercase tracking-widest mb-4">INVOICE</h2>
+            <div className="text-left sm:self-start">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-200 uppercase tracking-widest mb-3 sm:mb-4">INVOICE</h2>
               <div className="space-y-1">
                 <div className="flex justify-end gap-4 text-sm">
                   <span className="font-semibold text-gray-800">رقم الفاتورة:</span>
@@ -101,9 +101,9 @@ export default function InvoicePreviewPage() {
           </div>
 
           {/* Client Info */}
-          <div className="mb-10">
+          <div className="mb-8 sm:mb-10">
             <h3 className="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-3">فاتورة إلى:</h3>
-            <div className="bg-gray-50 rounded-lg p-4 inline-block min-w-[300px]">
+            <div className="bg-gray-50 rounded-lg p-4 w-full sm:inline-block sm:min-w-[300px]">
               <h4 className="text-xl font-bold text-gray-900 mb-1">{client?.name}</h4>
               <p className="text-gray-600 text-sm">{client?.address}</p>
               <p className="text-gray-600 text-sm mt-2" >{client?.phone}</p>
@@ -113,7 +113,8 @@ export default function InvoicePreviewPage() {
 
           {/* Items Table */}
           <div className="mb-8">
-            <table className="w-full text-right border-collapse">
+            <div className="overflow-x-auto -mx-5 sm:mx-0">
+              <table className="w-full min-w-[680px] sm:min-w-0 text-right border-collapse">
               <thead>
                 <tr className="border-b-2 border-gray-900 text-gray-900">
                   <th className="py-3 px-2 font-bold w-1/2">الخدمة / الوصف</th>
@@ -136,6 +137,7 @@ export default function InvoicePreviewPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Totals & Terms Grid */}
